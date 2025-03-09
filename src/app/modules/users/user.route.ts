@@ -6,15 +6,14 @@ import { USER_ROLE } from './user.constant';
 import { multerUpload } from '../../config/multer.config';
 import validateRequest from '../../MiddleWares/validateRequest';
 import { UserValidation } from './user.validation';
-// import validateRequest from '../../MiddleWares/validateRequest';
-// import { UserValidation } from './user.validation';
+import validateRequestFormdata from '../../MiddleWares/validateRequestFormdata';
 
 const router = express.Router();
 
 router.post(
   '/register',
   multerUpload.single('file'),
-  // validateRequest(UserValidation.userValidationSchema),
+  validateRequestFormdata(UserValidation.userValidationSchema),
   UserControllers.registerUser,
 );
 

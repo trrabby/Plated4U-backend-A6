@@ -17,8 +17,6 @@ const carCreateFun = catchAsync(async (req, res) => {
     ? req.files.map((file) => file.path)
     : [];
 
-  // For debugging purposes
-
   data['isDeleted'] = false;
   data['inStock'] = true;
 

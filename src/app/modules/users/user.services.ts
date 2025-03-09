@@ -3,7 +3,7 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errorHandlers/AppError';
 import { userSearchableFields } from './user.constant';
 import { IUser } from './user.interface';
-
+import httpStatus from 'http-status';
 import { UserModel } from './user.model';
 
 const registerNewUserIntoDB = async (payload: IUser) => {
@@ -43,6 +43,10 @@ const findAllUsers = async (query: Record<string, unknown>) => {
 };
 
 const updateAUser = async (id: string, payload: Partial<IUser>) => {
+  const user = await UserModel.findById(id);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
   const result = await UserModel.findOneAndUpdate({ _id: id }, payload, {
     new: true, // Return the updated document
     runValidators: true, // Run schema validators
@@ -51,6 +55,10 @@ const updateAUser = async (id: string, payload: Partial<IUser>) => {
 };
 
 const deleteAUser = async (id: string) => {
+  const user = await UserModel.findById(id);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
   const result = await UserModel.findOneAndUpdate(
     { _id: id },
     { isDeleted: true },

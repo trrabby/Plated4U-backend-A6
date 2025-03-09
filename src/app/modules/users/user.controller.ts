@@ -8,8 +8,6 @@ const registerUser = catchAsync(async (req, res) => {
   const data = JSON.parse(req.body.data);
   const imgUrl = req.file?.path;
 
-  // console.log({ data, imgUrl }); // For debugging purposes
-
   const user = await UserServices.registerNewUserIntoDB({
     ...data,
     imgUrl,

@@ -170,7 +170,19 @@ const getRevenue = async () => {
         models: 1,
       },
     },
-    { $sort: { year: 1 } }, // Sort results by year
+    {
+      $sort: { year: -1 }, // Sort documents by year
+    },
+    {
+      $addFields: {
+        models: {
+          $sortArray: {
+            input: '$models',
+            sortBy: { totalRevenue: -1 }, // Sort models by totalRevenue in descending order
+          },
+        },
+      },
+    },
   ];
 
   return await OrderModel.aggregate(revenuePipeline);
