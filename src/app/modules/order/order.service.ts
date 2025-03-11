@@ -4,7 +4,7 @@ import { TOrder } from './order.interface';
 import { OrderModel } from './order.model';
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { CarModel } from '../car/car.model';
+import { CustomizableMealModel } from '../cusomizedMeal/cMeal.model';
 
 const orderSearchableFields = ['email', 'status'];
 
@@ -19,7 +19,8 @@ const postOrderDataIntoDB = async (orderData: TOrder) => {
       if (orderInfo) {
         for (const singleOrder of orderInfo) {
           const id = singleOrder.productId;
-          const carData = await CarModel.findById(id).session(session);
+          const carData =
+            await CustomizableMealModel.findById(id).session(session);
 
           if (!carData) {
             throw new AppError(
