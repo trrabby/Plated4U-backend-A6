@@ -5,6 +5,8 @@ import { userSearchableFields } from './user.constant';
 import { IUser } from './user.interface';
 import httpStatus from 'http-status';
 import { UserModel } from './user.model';
+import { createToken } from '../auth/auth.utils';
+import config from '../../config';
 
 const registerNewUserIntoDB = async (payload: IUser) => {
   //set default user role
@@ -14,13 +16,42 @@ const registerNewUserIntoDB = async (payload: IUser) => {
 
   try {
     // create a user
-    const newUser = await UserModel.create(payload);
+    const user = await UserModel.create(payload);
     //create a student
-    if (!newUser) {
+    if (!user) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
+    let accessToken = '';
+    let refreshToken = '';
 
-    return newUser;
+    if (user) {
+      const jwtPayload = {
+        email: user.email,
+        role: user.role,
+        name: user.name,
+        imgUrl: user.imgUrl,
+      };
+
+      accessToken = createToken(
+        jwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expires_in as string,
+      );
+
+      refreshToken = createToken(
+        jwtPayload,
+        config.jwt_refresh_secret as string,
+        config.jwt_refresh_expires_in as string,
+      );
+    }
+
+    return {
+      user,
+      accessToken: `Bearer ${accessToken}`,
+      // accessToken,
+      refreshToken: `Bearer ${refreshToken}`,
+      needsPasswordChange: user?.needsPasswordChange,
+    };
   } catch (err: any) {
     throw new Error(err);
   }
