@@ -19,33 +19,18 @@ const postOrderDataIntoDB = async (orderData: TOrder) => {
       if (orderInfo) {
         for (const singleOrder of orderInfo) {
           const id = singleOrder.productId;
-          const carData =
+          const mealData =
             await CustomizableMealModel.findById(id).session(session);
 
-          if (!carData) {
+          if (!mealData) {
             throw new AppError(
               httpStatus.NOT_FOUND,
-              `Car with ID ${singleOrder.productId} not found in database.`,
-            );
-          }
-
-          if (carData.quantity < singleOrder.orderedQuantity) {
-            throw new AppError(
-              httpStatus.SERVICE_UNAVAILABLE,
-              `Ordered quantity exceeds available stock for  ${carData.brand}, ${carData.model}. Available Stock: ${carData.quantity}`,
+              `Meal with ID ${singleOrder.productId} not found in database.`,
             );
           }
 
           // Calculate total price from backend
-          calculatedTotalPrice += carData.price * singleOrder.orderedQuantity;
-
-          // Update car stock in the database
-          const qtyAfterOrder = carData.quantity - singleOrder.orderedQuantity;
-          await CarModel.findByIdAndUpdate(
-            id,
-            { quantity: qtyAfterOrder, inStock: qtyAfterOrder > 0 },
-            { session, new: true },
-          );
+          calculatedTotalPrice += mealData.price * singleOrder.orderedQuantity;
         }
       }
 
@@ -85,7 +70,7 @@ const getAllOrders = async (query: Record<string, unknown>) => {
     .sort({ _id: -1 })
     .populate({
       path: 'orderInfo.productId', // The field to populate
-      select: 'brand model year price imgUrl', // Fields to select from the populated document
+      select: 'name price imgUrl', // Fields to select from the populated document
     })
     .select('-__v'); // Optionally exclude fields from the main document (e.g., exclude `__v`)
 
@@ -97,7 +82,6 @@ const getAllOrders = async (query: Record<string, unknown>) => {
 const getAnOrder = async (id: string) => {
   const result = await OrderModel.find({ _id: id }).populate({
     path: 'orderInfo.productId', // The field to populate
-    select: 'brand model year price imgUrl', // Fields to select from the populated document
   });
   return result;
 };
@@ -115,7 +99,7 @@ const getRevenue = async () => {
     { $unwind: '$orderInfo' }, // Flatten orderInfo array
     {
       $lookup: {
-        from: 'cars', // Reference cars collection
+        from: 'meals', // Reference meals collection
         localField: 'orderInfo.productId',
         foreignField: '_id',
         as: 'productDetails',
@@ -134,7 +118,7 @@ const getRevenue = async () => {
             $multiply: ['$orderInfo.orderedQuantity', '$productDetails.price'],
           },
         },
-        noOfCarsSold: { $sum: '$orderInfo.orderedQuantity' },
+        noOfmealsSold: { $sum: '$orderInfo.orderedQuantity' },
       },
     },
     {
@@ -145,21 +129,21 @@ const getRevenue = async () => {
             model: '$_id.model',
             brand: '$brand',
             totalRevenue: '$totalRevenue',
-            noOfCarsSold: '$noOfCarsSold',
+            noOfmealsSold: '$noOfmealsSold',
             sellingPriceAvg: {
               // Calculate average selling price per model
               $cond: {
-                if: { $eq: ['$noOfCarsSold', 0] }, // Check if noOfCarsSold is 0
-                then: 0, // Set to 0 if no cars were sold
+                if: { $eq: ['$noOfmealsSold', 0] }, // Check if noOfmealsSold is 0
+                then: 0, // Set to 0 if no meals were sold
                 else: {
-                  $divide: ['$totalRevenue', '$noOfCarsSold'],
+                  $divide: ['$totalRevenue', '$noOfmealsSold'],
                 },
               },
             },
           },
         },
         totalRevenue: { $sum: '$totalRevenue' },
-        noOfCarsSold: { $sum: '$noOfCarsSold' },
+        noOfmealsSold: { $sum: '$noOfmealsSold' },
       },
     },
     {
@@ -167,7 +151,7 @@ const getRevenue = async () => {
         _id: 0,
         year: '$_id',
         totalRevenue: 1,
-        noOfCarsSold: 1,
+        noOfmealsSold: 1,
         models: 1,
       },
     },

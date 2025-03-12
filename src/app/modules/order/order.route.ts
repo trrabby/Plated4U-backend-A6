@@ -11,27 +11,27 @@ import {
 const router = express.Router();
 
 router.post(
-  '/order-car',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  '/order-meal',
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider, USER_ROLE.customer),
   validateRequest(orderValidationSchema),
   orderController.orderCreateFun,
 );
 
 router.get(
   '/',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider, USER_ROLE.customer),
   orderController.getAllOrdersFun,
 );
 
 router.get(
   '/my-orders',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider, USER_ROLE.customer),
   orderController.getMyOrdersFun,
 );
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider),
   validateRequest(updateOrderValidationSchema),
   orderController.updateAnOrderFun,
 );
@@ -42,6 +42,10 @@ router.get(
   orderController.getTotalRevenueFun,
 );
 
-router.get('/:orderId', auth(USER_ROLE.admin), orderController.getAnOrderFun);
+router.get(
+  '/:orderId',
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider),
+  orderController.getAnOrderFun,
+);
 
 export const orderRoute = router;

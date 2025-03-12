@@ -8,7 +8,11 @@ const PaymentSchema = new Schema<TPayment>(
     email: { type: String, required: true },
     orderInfo: [
       {
-        productId: { type: Types.ObjectId, required: true, ref: 'Cars' },
+        productId: {
+          type: Types.ObjectId,
+          required: true,
+          ref: 'CustomizableMeal',
+        },
         orderedQuantity: { type: Number, required: true },
         _id: { type: Types.ObjectId, required: false }, // Make _id optional or handle as per requirement
       },

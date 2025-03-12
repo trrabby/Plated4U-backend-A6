@@ -121,10 +121,34 @@ const getAPaymentData = async (tran_id: string) => {
   return result;
 };
 
+const getMyPaymentsData = async (
+  query: Record<string, unknown>,
+  email: string,
+) => {
+  const paymentQuery = new QueryBuilder(PaymentModel.find({ email }), query)
+    .search(paymentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await paymentQuery.modelQuery
+    .sort({ _id: -1 })
+    .populate({
+      path: 'orderInfo.productId', // The field to populate
+    })
+    .select('-__v'); // Optionally exclude fields from the main document (e.g., exclude `__v`)
+
+  const meta = await paymentQuery.countTotal();
+
+  return { meta, result };
+};
+
 export const paymentService = {
   initializePayment,
   processPaymentSuccess,
   processPaymentFailed,
   getAllPaymentData,
   getAPaymentData,
+  getMyPaymentsData,
 };

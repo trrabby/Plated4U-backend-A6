@@ -3,6 +3,8 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import customizedMsg from '../../utils/customisedMsg';
+import { jwtDecode } from 'jwt-decode';
+import { IUser } from '../users/user.interface';
 
 // Initialize Payment
 export const initPayment = catchAsync(async (req, res) => {
@@ -57,9 +59,28 @@ const getAPaymentFun = catchAsync(async (req, res) => {
   });
 });
 
-export const PaymentModel = {
+const getMyPaymentsFun = catchAsync(async (req, res) => {
+  const tokenWithBearer = req.headers.authorization;
+  let token;
+  if (tokenWithBearer) {
+    token = tokenWithBearer.split(' ')[1];
+  }
+  const user = jwtDecode(token!) as IUser;
+  // console.log(user);
+  const result = await paymentService.getMyPaymentsData(req.query, user.email);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: customizedMsg(result?.result, 'Payments'),
+    data: result,
+  });
+});
+
+export const PaymentController = {
   initPayment,
   paymentSuccess,
   getAllpaymentsFun,
   getAPaymentFun,
+  getMyPaymentsFun,
 };
