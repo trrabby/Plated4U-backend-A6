@@ -10,29 +10,25 @@ const router = express.Router();
 router.post(
   '/add-meal',
   multerUpload.array('files', 5),
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider),
   cMealController.cMealCreateFun,
 );
 
 router.get('/', cMealController.getAllMealFun);
 
-// router.patch(
-//   '/:id',
-//   multerUpload.array('files', 5),
-//   auth(USER_ROLE.admin),
-//   carController.updateACarFun,
-// );
+router.patch(
+  '/:id',
+  multerUpload.array('files', 5),
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider),
+  cMealController.updateMealFun,
+);
 
-// router.put(
-//   '/delete-car/:id',
-//   auth(USER_ROLE.admin, USER_ROLE.user),
-//   carController.deleteACarFun,
-// );
+router.patch(
+  '/delete-car/:id',
+  auth(USER_ROLE.admin, USER_ROLE.mealProvider),
+  cMealController.deleteAMealFun,
+);
 
-// router.get(
-//   '/:id',
-//   auth(USER_ROLE.admin, USER_ROLE.user),
-//   carController.getACarFun,
-// );
+router.get('/:id', cMealController.getMealFun);
 
 export const cMealRoutes = router;

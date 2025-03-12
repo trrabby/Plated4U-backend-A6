@@ -9,9 +9,6 @@ import { createToken } from '../auth/auth.utils';
 import config from '../../config';
 
 const registerNewUserIntoDB = async (payload: IUser) => {
-  //set default user role
-  payload.role = 'user';
-
   // console.log(payload);
 
   try {

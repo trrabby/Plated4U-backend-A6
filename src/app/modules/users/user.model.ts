@@ -35,8 +35,8 @@ const userSchema = new Schema<IUser, UserModelStatic>(
 
     role: {
       type: String,
-      enum: ['admin', 'user'],
-      default: 'user',
+      enum: ['admin', 'mealProvider', 'customer'],
+      default: 'customer',
     },
 
     status: {

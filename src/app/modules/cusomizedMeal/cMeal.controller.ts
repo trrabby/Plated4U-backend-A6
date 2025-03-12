@@ -48,61 +48,63 @@ const getAllMealFun = catchAsync(async (req, res) => {
   });
 });
 
-// const updateACarFun = catchAsync(async (req, res) => {
-//   const { id } = req.params;
+const updateMealFun = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
-//   const data = JSON.parse(req.body.data);
+  const data = JSON.parse(req.body.data);
 
-//   const imgUrl: string[] = data.previousUploadedImg || [];
-//   delete data.previousUploadedImg;
+  const imgUrl: string[] = data.previousUploadedImg || [];
+  delete data.previousUploadedImg;
 
-//   const newUploadedImgUrl = Array.isArray(req.files)
-//     ? req.files.map((file) => file.path)
-//     : [];
-//   if (newUploadedImgUrl.length > 0) {
-//     imgUrl.push(...newUploadedImgUrl);
-//   }
-//   // console.log(imgUrl);
+  const newUploadedImgUrl = Array.isArray(req.files)
+    ? req.files.map((file) => file.path)
+    : [];
+  if (newUploadedImgUrl.length > 0) {
+    imgUrl.push(...newUploadedImgUrl);
+  }
+  // console.log(imgUrl);
 
-//   const payLoad = { ...data, imgUrl };
-//   // console.log(payLoad);
-//   const result = await CarService.updateACarData(id, payLoad);
+  const payLoad = { ...data, imgUrl };
+  validateRequest(cMealValidations.cMealUpdateValidationSchema);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: `Car's Data Updated Successfully`,
-//     data: result,
-//   });
-// });
+  const result = await MealService.updateAMealData(id, payLoad);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Meal's Data Updated Successfully`,
+    data: result,
+  });
+});
 
 // // Function to delete a car
-// const deleteACarFun = catchAsync(async (req, res) => {
-//   const { id } = req.params;
-//   const result = await CarService.deleteACarData(id);
+const deleteAMealFun = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await MealService.deleteAMealData(id);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Car Deleted Successfully',
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Meal Deleted Successfully',
+    data: result,
+  });
+});
 
-// // Function to get a single car
-// const getACarFun = catchAsync(async (req, res) => {
-//   const { id } = req.params;
-//   const result = await CarService.getACar(id);
+const getMealFun = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await MealService.getAMeal(id);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Car Retrived Successfully',
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Car Retrived Successfully',
+    data: result,
+  });
+});
 
 export const cMealController = {
   cMealCreateFun,
   getAllMealFun,
+  updateMealFun,
+  deleteAMealFun,
+  getMealFun,
 };

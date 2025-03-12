@@ -8,7 +8,7 @@ export interface IUser {
   needsPasswordChange: boolean;
   passwordChangedAt?: Date;
   imgUrl?: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'mealProvider' | 'customer';
   isDeleted: boolean;
   status: 'active' | 'blocked';
 }
