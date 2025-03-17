@@ -43,7 +43,7 @@ const getAllMealFun = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: customizedMsg(result?.result, 'Cars'),
+    message: customizedMsg(result?.result, 'Meals'),
     data: result,
   });
 });
@@ -96,7 +96,7 @@ const getMealFun = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Car Retrived Successfully',
+    message: 'Meal Retrived Successfully',
     data: result,
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from '../../builder/QueryBuilder';
 import { ICustomizableMeal } from './cMeal.interface';
 import { CustomizableMealModel } from './cMeal.model';
@@ -17,12 +18,21 @@ const postMealDataIntoDB = async (mealData: ICustomizableMeal) => {
 };
 
 const getAllMeals = async (query: Record<string, unknown>) => {
-  const MealsQuery = new QueryBuilder(CustomizableMealModel.find(), query)
+  const { minPrice, maxPrice, ...mealQuery } = query;
+
+  // Build the filter object
+  const filter: Record<string, any> = {};
+
+  const MealsQuery = new QueryBuilder(
+    CustomizableMealModel.find(filter),
+    mealQuery,
+  )
     .search(mealSearchableFields)
     .filter()
     .sort()
     .paginate()
-    .fields();
+    .fields()
+    .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
 
   const result = await MealsQuery.modelQuery.sort({ _id: -1 }).find({
     $or: [
