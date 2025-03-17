@@ -5,6 +5,9 @@ export type TOrder = {
   orderInfo: [
     {
       productId: Types.ObjectId;
+      base: string;
+      protein: string;
+      extras: string[];
       orderedQuantity: number;
     },
   ];
