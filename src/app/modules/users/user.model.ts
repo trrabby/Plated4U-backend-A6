@@ -19,6 +19,26 @@ const userSchema = new Schema<IUser, UserModelStatic>(
       required: true,
       select: 0,
     },
+    city: {
+      type: String,
+      required: true,
+    },
+    colony: {
+      type: String,
+      required: true,
+    },
+    postOffice: {
+      type: String,
+      required: true,
+    },
+    subDistrict: {
+      type: String,
+      required: true,
+    },
+    number: {
+      type: String,
+      required: true,
+    },
 
     imgUrl: {
       type: String,
