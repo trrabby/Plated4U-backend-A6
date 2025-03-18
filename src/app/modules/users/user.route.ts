@@ -20,7 +20,7 @@ router.post(
 router.get('/', auth(USER_ROLE.admin), UserControllers.AllUsers);
 
 router.patch(
-  '/:id',
+  '/:email',
   auth(USER_ROLE.admin),
   validateRequest(UserValidation.userUpdateValidationSchema),
   UserControllers.updateAUserFun,

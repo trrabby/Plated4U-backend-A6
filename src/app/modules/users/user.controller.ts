@@ -34,10 +34,10 @@ const AllUsers = catchAsync(async (req, res) => {
 });
 
 const updateAUserFun = catchAsync(async (req, res) => {
-  const { id } = req.params;
+  const { email } = req.params;
   const payLoad = req.body;
 
-  const result = await UserServices.updateAUser(id, payLoad);
+  const result = await UserServices.updateAUser(email, payLoad);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

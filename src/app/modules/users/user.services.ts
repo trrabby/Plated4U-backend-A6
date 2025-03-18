@@ -70,12 +70,12 @@ const findAllUsers = async (query: Record<string, unknown>) => {
   };
 };
 
-const updateAUser = async (id: string, payload: Partial<IUser>) => {
-  const user = await UserModel.findById(id);
+const updateAUser = async (email: string, payload: Partial<IUser>) => {
+  const user = await UserModel.findOne({ email });
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
   }
-  const result = await UserModel.findOneAndUpdate({ _id: id }, payload, {
+  const result = await UserModel.findOneAndUpdate({ email }, payload, {
     new: true, // Return the updated document
     runValidators: true, // Run schema validators
   });
