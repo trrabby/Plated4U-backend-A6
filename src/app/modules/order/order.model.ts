@@ -34,7 +34,7 @@ const OrderSchema = new Schema<TOrder>(
       name: { type: String, required: true },
       number: { type: String, required: true },
       city: { type: String, required: true },
-      clolony: { type: String, required: true },
+      colony: { type: String, required: true },
       postOffice: { type: String, required: true },
       subDistrict: { type: String, required: true },
     },

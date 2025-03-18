@@ -18,7 +18,7 @@ export type TOrder = {
     name: string;
     number: string;
     city: string;
-    clolony: string;
+    colony: string;
     postOffice: string;
     subDistrict: string;
   };

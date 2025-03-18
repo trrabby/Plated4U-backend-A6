@@ -16,7 +16,7 @@ export const orderValidationSchema = z.object({
       name: z.string().min(1, 'Name is required.'),
       number: z.string().min(1, 'Number is required.'),
       city: z.string().min(1, 'City is required.'),
-      clolony: z.string().min(1, 'Colony is required.'),
+      colony: z.string().min(1, 'Colony is required.'),
       postOffice: z.string().min(1, 'Post office is required.'),
       subDistrict: z.string().min(1, 'Sub-district is required.'),
     }),
@@ -43,7 +43,7 @@ export const updateOrderValidationSchema = z.object({
       name: z.string().min(1, 'Name is required'),
       number: z.string().min(1, 'Phone number is required'),
       city: z.string().min(1, 'City is required'),
-      clolony: z.string().min(1, 'Colony is required'),
+      colony: z.string().min(1, 'Colony is required'),
       postOffice: z.string().min(1, 'Post Office is required'),
       subDistrict: z.string().min(1, 'Sub District is required'),
     })
