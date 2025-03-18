@@ -15,6 +15,7 @@ const OrderSchema = new Schema<TOrder>(
         protein: { type: String, required: true },
         extras: [{ type: String, required: true }],
         orderedQuantity: { type: Number, required: true },
+        price: { type: Number, required: true },
       },
     ],
     totalPrice: { type: Number, required: true },

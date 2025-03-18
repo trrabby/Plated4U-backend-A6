@@ -9,6 +9,7 @@ export type TOrder = {
       protein: string;
       extras: string[];
       orderedQuantity: number;
+      price: number;
     },
   ];
   totalPrice: number;
