@@ -4,12 +4,16 @@ export type TOrder = {
   email: string;
   orderInfo: [
     {
+      name: string;
+      description: string;
+      imgUrl: string[];
       productId: Types.ObjectId;
-      base: string;
-      protein: string;
+      baseOptions: string;
+      proteinOptions: string;
       extras: string[];
-      orderedQuantity: number;
+      dietaryPreferences: string;
       price: number;
+      orderedQuantity: number;
     },
   ];
   totalPrice: number;
